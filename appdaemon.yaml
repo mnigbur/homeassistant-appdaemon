@@ -1,0 +1,12 @@
+log:
+  logfile: /home/homeassistant/.homeassistant/appdaemon.log
+  errorfile: /home/homeassistant/.homeassistant/appdaemon.err.log
+  logsize: 100000
+  log_generations: 3
+appdaemon:
+  threads: 10
+  api_port: 5000
+  plugins:
+    HASS:
+      type: hass
+      ha_url: http://192.168.178.32:8123

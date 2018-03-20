@@ -1,0 +1,102 @@
+utils:
+  module: utils
+  class: utils
+
+Smart Heat:
+  module: smart_heat
+  class: SmartHeat
+  morning_on_week: 05:45:00
+  morning_on_weekend: 07:00:00
+  evening_on: '17:00:00'
+  off_temp: input_number.heating_cold
+  on_temp: input_number.heating_warm
+  input_select: input_select.house_mode,Morgen,Tag,Abend
+  switch: input_boolean.heating_auto
+  thermostats: climate.leq0845978,climate.leq0846316,climate.leq0846600
+ 
+HouseModes:
+  module: house_modes
+  class: HouseModes
+  morning_on_week: 06:00:00
+  morning_on_weekend: 07:30:00
+  night_on_week: '23:00:00'
+  night_on_weekend: 01:00:00
+
+Motion Kuechenschrank:
+  module: motion_lights
+  class: MotionLights
+  dependencies:
+    - utils
+  sensor: binary_sensor.bewegungsmelder_kueche
+  entity_on: light.kuechenschrank
+  entity_off: light.kuechenschrank
+  delay: input_number.pir_timeout
+  constrain_input_boolean: input_boolean.enable_motion_detection
+  #constrain_start_time: sunset - 00:45:00
+  #constrain_end_time: sunrise + 00:45:00
+  #constrain_presence: anyone
+  #constrain_input_select: input_select.house_mode,Abend
+  
+Motion Balkon:
+  module: motion_lights
+  class: MotionLights
+  dependencies:
+    - utils
+  sensor: binary_sensor.bewegungsmelder_balkon
+  entity_on: scene.balkon_idle
+  entity_off: light.balkon
+  delay: input_number.pir_timeout
+  constrain_input_boolean: input_boolean.enable_motion_detection
+  constrain_input_select: input_select.house_mode,Abend
+  
+# Motion Notification:
+  # class: MotionLights
+  # dependencies: config
+  # module: motion_lights
+  # sensor: binary_sensor.bewegungsmelder_kueche
+  
+Notify State Change:
+  module: change_state_notify
+  class: ChangeStateNotify
+  dependencies:
+    - utils
+  entities: device_tracker.mni_mni,device_tracker.khi_khi,group.all_devices
+    
+Telegram Bot:
+  module: telegram
+  class: TelegramBotEventListener
+  telegram_modules: None
+  groups:
+    admin:
+      chatids:
+        - "121529856"
+      menu:
+        - Rooms
+        - Lights,Switches,Scenes
+      switches:
+        - switch.tv
+      lights:
+        - light.arbeitszimmer
+        - switch.arbeitszimmer_stehlampe
+        - light.balkon
+        - switch.balkon_weihnachtsbeleuchtung
+        - light.kueche
+        - light.kuechenschrank
+        - light.wohnzimmer
+        - switch.wohnzimmer_stehlampe
+        - switch.wohnzimmer_weihnachtsbeleuchtung
+        - light.wohnzimmer_wuerfel
+      rooms:
+        - group.arbeitszimmer_env
+        - group.arbeitszimmer_lights
+        - group.arbeitszimmer_switches
+        - group.balkon_env
+        - group.balkon_lights
+        - group.balkon_switches
+        - group.kueche_env
+        - group.kueche_lights
+        - group.kueche_switches
+        - group.wohnzimmer_env
+        - group.wohnzimmer_lights
+        - group.wohnzimmer_media
+        - group.wohnzimmer_switches
