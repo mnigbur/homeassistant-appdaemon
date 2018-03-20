@@ -8,8 +8,8 @@ Smart Heat:
   morning_on_week: 05:45:00
   morning_on_weekend: 07:00:00
   evening_on: '17:00:00'
-  off_temp: input_number.heating_cold
-  on_temp: input_number.heating_warm
+  off_temp: input_number.heating_night
+  on_temp: input_number.heating_day
   input_select: input_select.house_mode,Morgen,Tag,Abend
   switch: input_boolean.heating_auto
   thermostats: climate.leq0845978,climate.leq0846316,climate.leq0846600
